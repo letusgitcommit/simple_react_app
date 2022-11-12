@@ -2,21 +2,27 @@ import Card from 'react-bootstrap/Card'
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import ChildList from "./ChildList";
-
-const childArray = [{text: 'first text', id: 2}, {text: 'second text', id: 3}]
+import {useState} from "react";
 
 export default function TodoCard(props) {
+    const [expanded, setExpanded] = useState(false)
     return (
-        <Card style={{width: '36rem'}} className='mt-3' id={props.id}>
+        <Card style={{width: '36rem'}} className='mt-3' id={props.todo.id}>
             <Card.Text className='m-2'>
                 <ListGroup className='list-group-flush'>
                     <ListGroup.Item>
                         <div className='d-flex'>
                             <div className='me-auto'>
-                                Todo text
+                                {props.todo.text}
                             </div>
                             <div>
-                                <Button className='btn-sm' variant='outline-primary'>Expand</Button>
+                                <Button
+                                    className='btn-sm'
+                                    variant='outline-primary'
+                                    onClick={() => setExpanded(state => !state)}
+                                >
+                                    { expanded ? 'Close' : 'Expand'}
+                                </Button>
                             </div>
                         </div>
                     </ListGroup.Item>
@@ -24,15 +30,31 @@ export default function TodoCard(props) {
                 <hr className='text-primary'/>
                 <ListGroup className='list-group-flush'>
                     <ListGroup.Item>Is Complete</ListGroup.Item>
-                    { true &&
+                    { expanded &&
                         <>
-                            <ListGroup.Item><a href={`#${props.parent.id}`}>{props.parent.text}</a></ListGroup.Item>
                             <ListGroup.Item>Created</ListGroup.Item>
                             <ListGroup.Item>Modified</ListGroup.Item>
-                            <ChildList childArray={childArray} />
                         </>
                     }
                 </ListGroup>
+                {props.todo.parent && expanded &&
+                    <>
+                        <hr className='text-primary' />
+                        <ListGroup className='list-group-flush'>
+                            <ListGroup.Item>Parent</ListGroup.Item>
+                            <ListGroup.Item><a href={`#${props.todo.parent.id}`}>{props.todo.parent.text}</a></ListGroup.Item>
+                        </ListGroup>
+                    </>
+                }
+                { props.todo.childArray && expanded &&
+                    <>
+                        <hr className='text-primary' />
+                        <ListGroup className='list-group-flush'>
+                            <ListGroup.Item>Subtasks</ListGroup.Item>
+                            <ChildList childArray={props.todo.childArray} />
+                        </ListGroup>
+                    </>
+                }
             </Card.Text>
 
         </Card>
