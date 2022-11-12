@@ -8,8 +8,8 @@ export default function ControlCard(props) {
                 <Card.Title><strong className='text-primary'>Todo App</strong></Card.Title>
                 <InputBar
                     ph='Search Bar'
-                    buttonText='Search'
-                    name='search'
+                    value={props.searchValue}
+                    onChange={props.onChange}
                 />
                 <InputBar
                     ph='New Todo'

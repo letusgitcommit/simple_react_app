@@ -15,9 +15,11 @@ export default function InputBar(props) {
                         onChange={props.onChange}
                         name={props.name}
                     />
-                    <Button variant='outline-success' type='submit'>
-                        {props.buttonText || 'Enter'}
-                    </Button>
+                    { props.buttonText &&
+                        <Button variant='outline-success' type='submit'>
+                            {props.buttonText || 'Enter'}
+                        </Button>
+                    }
                 </InputGroup>
             </Form.Group>
         </Form>

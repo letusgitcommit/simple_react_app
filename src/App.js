@@ -1,5 +1,6 @@
-import ControlCard from "./components/ControlBar";
+import ControlCard from "./components/ControlCard";
 import TodoCard from "./components/TodoCard";
+import {useState} from "react";
 
 const todos = [
     {
@@ -46,11 +47,21 @@ const todos = [
 
 
 function App() {
+    const [searchText, setSearchText] = useState('')
+
+    const handleSearchTextOnChange = e => {
+        setSearchText(e.target.value);
+    }
+
     return (
         <div className={'d-flex justify-content-center'}>
             <div className={'flex-column mt-3'}>
-                <ControlCard />
-                {todos.map(todo => {
+                <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
+                {todos
+                    .filter(todo => {
+                        return todo.text.startsWith(searchText)
+                    })
+                    .map(todo => {
                     return <TodoCard todo={todo}/>
                 })}
             </div>
