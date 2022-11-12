@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import ControlCard from "./components/ControlBar";
+import TodoCard from "./components/TodoCard";
+
+const func = () => {
+    const arr = []
+    for (let i = 0; i < 9; i++) {
+        arr.push(<TodoCard id={i} parent={{text: "Parent", id: 0}}/>)
+    }
+    return arr
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className={'d-flex justify-content-center'}>
+            <div className={'flex-column mt-3'}>
+                <ControlCard />
+                {func()}
+            </div>
+        </div>
+    );
 }
 
 export default App;
