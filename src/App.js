@@ -68,7 +68,7 @@ function App() {
         //         })}
         //     </div>
         // </div>
-        <Container fluid={true} className='d-flex justify-content-center'>
+        <Container fluid={true} className='d-flex justify-content-center my-3'>
             <Col sm={6}>
                 <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
                 {todos
