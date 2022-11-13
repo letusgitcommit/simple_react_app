@@ -42,7 +42,7 @@ export default function TodoCard(props) {
                         <hr className='text-primary' />
                         <ListGroup className='list-group-flush'>
                             <ListGroup.Item>Parent</ListGroup.Item>
-                            <ListGroup.Item><a href={`#${props.todo.parent.id}`}>{props.todo.parent.text}</a></ListGroup.Item>
+                            <ListGroup.Item>{props.todo.parent.text}</ListGroup.Item>
                         </ListGroup>
                     </>
                 }

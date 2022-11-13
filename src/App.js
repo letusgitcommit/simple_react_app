@@ -62,7 +62,7 @@ function App() {
                         return todo.text.startsWith(searchText)
                     })
                     .map(todo => {
-                    return <TodoCard todo={todo}/>
+                    return <TodoCard todo={todo} key={todo.id}/>
                 })}
             </div>
         </div>
