@@ -1,5 +1,7 @@
 import ControlCard from "./components/ControlCard";
 import TodoCard from "./components/TodoCard";
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
 import {useState} from "react";
 
 const todos = [
@@ -54,8 +56,20 @@ function App() {
     }
 
     return (
-        <div className={'d-flex justify-content-center'}>
-            <div className={'flex-column mt-3'}>
+        // <div className={'d-flex justify-content-center'}>
+        //     <div className={'flex-column my-3 col-7'}>
+        //         <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
+        //         {todos
+        //             .filter(todo => {
+        //                 return todo.text.startsWith(searchText)
+        //             })
+        //             .map(todo => {
+        //             return <TodoCard todo={todo} key={todo.id}/>
+        //         })}
+        //     </div>
+        // </div>
+        <Container fluid={true} className='d-flex justify-content-center'>
+            <Col sm={6}>
                 <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
                 {todos
                     .filter(todo => {
@@ -64,8 +78,8 @@ function App() {
                     .map(todo => {
                     return <TodoCard todo={todo} key={todo.id}/>
                 })}
-            </div>
-        </div>
+            </Col>
+        </Container>
     );
 }
 

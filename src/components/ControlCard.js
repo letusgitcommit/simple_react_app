@@ -3,7 +3,7 @@ import InputBar from "./InputBar";
 
 export default function ControlCard(props) {
     return (
-        <Card style={{width: '36rem'}}>
+        <Card className='mb-3'>
             <Card.Body>
                 <Card.Title><strong className='text-primary'>Todo App</strong></Card.Title>
                 <InputBar

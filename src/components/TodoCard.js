@@ -7,7 +7,7 @@ import {useState} from "react";
 export default function TodoCard(props) {
     const [expanded, setExpanded] = useState(false)
     return (
-        <Card style={{width: '36rem'}} className='mt-3' id={props.todo.id}>
+        <Card className='mb-3' id={props.todo.id}>
             <Card.Text className='m-2'>
                 <ListGroup className='list-group-flush'>
                     <ListGroup.Item>
