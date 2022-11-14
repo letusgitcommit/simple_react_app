@@ -1,7 +1,7 @@
 import ControlCard from "./components/ControlCard";
 import TodoCard from "./components/TodoCard";
 import authFetch from "./utils/AuthFetch";
-import {baseUrl, pingApi, getTodos} from "./utils/Api";
+import {baseUrl, pingApi, getTodos, newTodo} from "./utils/Api";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -17,6 +17,20 @@ function App() {
     const [showInvalidLogin, setShowInvalidLogin] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [newTodoText, setNewTodoText] = useState('');
+    const [submittedTodo, setSubmittedTodo] = useState(false);
+
+    const handleNewTodoSubmit = e => {
+        e.preventDefault();
+        const result = newTodo(newTodoText);
+        if (!result) {
+            console.log('did not work')
+        }
+        else {
+            setNewTodoText('');
+            setSubmittedTodo(state => !state)
+        }
+    }
 
     async function login(email, password) {
         const auth_string = window.btoa(`${email}:${password}`)
@@ -32,7 +46,6 @@ function App() {
             setAuthStatus(true);
             setShowLoginModal(false);
             window.sessionStorage.setItem('token', res.token)
-            setTodos(await getTodos())
         }
         else if (init_response.status === 401) {
                 setShowInvalidLogin(true);
@@ -60,14 +73,14 @@ function App() {
         checkApi();
     }, [])
 
-    const handleSearchTextOnChange = e => {
-        setSearchText(e.target.value);
-    }
+
+    useEffect(() => {
+        (async () => setTodos(await getTodos()))()
+    }, [submittedTodo])
 
     return (
         <Container fluid={true} className='d-flex justify-content-center my-3'>
             <Col sm={6}>
-                <Button onClick={(e) => authFetch()} variant='primary' className='mb-3'>Request</Button>
                 <Modal show={showLoginModal}>
                     <Form onSubmit={e => {e.preventDefault(); login(email, password);}}>
                         <Modal.Header>
@@ -98,7 +111,13 @@ function App() {
                 </Modal>
                 {authStatus && Array.isArray(todos) &&
                     <>
-                        <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
+                        <ControlCard
+                            searchValue={searchText}
+                            onSearchChange={e => setSearchText(e.target.value)}
+                            newTodoValue={newTodoText}
+                            onNewTodoChange={e => setNewTodoText(e.target.value)}
+                            onNewTodoSubmit={handleNewTodoSubmit}
+                        />
                         {todos
                             .filter(todo => {
                                 return todo.text.startsWith(searchText)

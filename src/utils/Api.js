@@ -11,3 +11,16 @@ export const getTodos = async () => {
     const res = await authFetch(baseUrl + 'todos/api/v1/')
     return await res.json()
 }
+
+export const newTodo = async (text) => {
+    const res = await authFetch(baseUrl + 'todos/api/v1/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            text: text
+        })
+    });
+    return res.status === 201;
+}
