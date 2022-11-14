@@ -1,28 +1,26 @@
 import ControlCard from "./components/ControlCard";
 import TodoCard from "./components/TodoCard";
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
+import authFetch from "./utils/AuthFetch";
+import {baseUrl, pingApi, getTodos} from "./utils/Api";
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import {useEffect, useState} from "react";
-
-async function authFetch(url, init_obj={headers: {}}) {
-    init_obj.headers = {...init_obj.headers, ...{'Authorization': `Token ${window.sessionStorage.getItem('token') || null}`}}
-    return await fetch(url, init_obj)
-}
 
 function App() {
     const [searchText, setSearchText] = useState('');
     const [todos, setTodos] = useState([]);
     const [authStatus, setAuthStatus] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(true);
+    const [showInvalidLogin, setShowInvalidLogin] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function login(email, password) {
         const auth_string = window.btoa(`${email}:${password}`)
-        const init_response = await fetch('http://127.0.0.1:8000/api/v1/auth/login', {
+        const init_response = await fetch(baseUrl + 'api/v1/auth/login', {
             method: 'POST',
             mode: 'cors',
             headers : {
@@ -34,20 +32,28 @@ function App() {
             setAuthStatus(true);
             setShowLoginModal(false);
             window.sessionStorage.setItem('token', res.token)
+            setTodos(await getTodos())
         }
+        else if (init_response.status === 401) {
+                setShowInvalidLogin(true);
+            }
     }
 
     useEffect(() => {
         async function checkApi(){
-            const response = await authFetch('http://127.0.0.1:8000/todos/api/v1/');
+            const response = await pingApi();
             if (response.status === 403) {
                 setAuthStatus(false);
                 setShowLoginModal(true);
             }
-            else {
+            else if (response.status === 401) {
+                setShowInvalidLogin(true);
+            }
+            else if (response.status === 200) {
                 setAuthStatus(true);
                 setShowLoginModal(false);
-                const data = await response.json()
+                setShowInvalidLogin(false);
+                const data = await getTodos()
                 setTodos(data)
             }
         }
@@ -65,16 +71,24 @@ function App() {
                 <Modal show={showLoginModal}>
                     <Form onSubmit={e => {e.preventDefault(); login(email, password);}}>
                         <Modal.Header>
-                            <Modal.Title>Login</Modal.Title>
+                            <Modal.Title>{showInvalidLogin ? 'Invalid Credentials' : 'Login'}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group>
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control type='text' value={email} onChange={e => setEmail(e.target.value)} />
+                                <Form.Control type='text'
+                                              value={email}
+                                              onChange={e => setEmail(e.target.value)}
+                                              required
+                                />
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type='password' value={password} onChange={e => setPassword(e.target.value)} />
+                                <Form.Control type='password'
+                                              value={password}
+                                              onChange={e => setPassword(e.target.value)}
+                                              required
+                                />
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
@@ -82,7 +96,7 @@ function App() {
                         </Modal.Footer>
                     </Form>
                 </Modal>
-                {authStatus &&
+                {authStatus && Array.isArray(todos) &&
                     <>
                         <ControlCard searchValue={searchText} onChange={handleSearchTextOnChange}/>
                         {todos

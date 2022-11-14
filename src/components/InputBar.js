@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 
 export default function InputBar(props) {
     return (
-        <Form className='mb-3' onSubmit={e => e.preventDefault()}>
+        <Form className='mb-3' onSubmit={props.onSubmit}>
             <Form.Group>
                 <Form.Label className='text-secondary'>{props.ph}</Form.Label>
                 <InputGroup>
