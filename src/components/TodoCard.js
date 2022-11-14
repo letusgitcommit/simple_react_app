@@ -8,7 +8,7 @@ export default function TodoCard(props) {
     const [expanded, setExpanded] = useState(false)
     return (
         <Card className='mb-3' id={props.todo.id}>
-            <Card.Text className='m-2'>
+            <div className='m-2'>
                 <ListGroup className='list-group-flush'>
                     <ListGroup.Item>
                         <div className='d-flex'>
@@ -55,7 +55,7 @@ export default function TodoCard(props) {
                         </ListGroup>
                     </>
                 }
-            </Card.Text>
+            </div>
 
         </Card>
     );
