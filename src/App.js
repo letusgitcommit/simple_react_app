@@ -44,6 +44,7 @@ function App() {
             setAuthStatus(true);
             setShowLoginModal(false);
             window.sessionStorage.setItem('token', res.token)
+            mutateState()
         }
         else if (init_response.status === 401) {
                 setShowInvalidLogin(true);
