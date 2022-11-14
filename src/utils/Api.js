@@ -24,3 +24,23 @@ export const newTodo = async (text) => {
     });
     return res.status === 201;
 }
+
+export const setCompleteStatus = async (id, status) => {
+    const res = await authFetch(baseUrl + `todos/api/v1/${id}/`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            complete: status
+        })
+    });
+    return res.status === 200;
+}
+
+export const deleteTodo = async id => {
+    const res = await authFetch(baseUrl + `todos/api/v1/${id}/`, {
+        method: 'DELETE',
+    });
+    return res.status === 204;
+}

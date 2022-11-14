@@ -1,8 +1,8 @@
 import Card from 'react-bootstrap/Card'
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import ChildList from "./ChildList";
 import {useState} from "react";
+import {setCompleteStatus, deleteTodo} from "../utils/Api";
 
 
 export default function TodoCard(props) {
@@ -38,6 +38,26 @@ export default function TodoCard(props) {
                         <>
                             <ListGroup.Item>Created: {ct.getMonth()}/{ct.getDate()}/{ct.getFullYear()}</ListGroup.Item>
                             <ListGroup.Item>Modified: {mt.getMonth()}/{mt.getDate()}/{mt.getFullYear()}</ListGroup.Item>
+                            <div className='d-flex'>
+                                <Button onClick={() => {
+                                    const res = setCompleteStatus(props.todo.id, !props.todo.complete);
+                                    if (res) {
+                                        props.mutateParentState();
+                                    }
+                                }}
+                                        variant='primary'
+                                        className='mt-3 me-auto'
+                                >{props.todo.complete ? 'Mark Not Complete' : 'Mark Complete'}</Button>
+                                <Button onClick={() => {
+                                    const res = deleteTodo(props.todo.id);
+                                    if (res) {
+                                        props.mutateParentState();
+                                    }
+                                }}
+                                        variant='danger'
+                                        className='mt-3'
+                                >Delete</Button>
+                            </div>
                         </>
                     }
                 </ListGroup>

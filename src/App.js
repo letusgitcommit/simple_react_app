@@ -1,6 +1,5 @@
 import ControlCard from "./components/ControlCard";
 import TodoCard from "./components/TodoCard";
-import authFetch from "./utils/AuthFetch";
 import {baseUrl, pingApi, getTodos, newTodo} from "./utils/Api";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -18,7 +17,9 @@ function App() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newTodoText, setNewTodoText] = useState('');
-    const [submittedTodo, setSubmittedTodo] = useState(false);
+    const [mutatedState, setMutatedState] = useState(false);
+
+    const mutateState = () => setMutatedState(state => !state);
 
     const handleNewTodoSubmit = e => {
         e.preventDefault();
@@ -28,7 +29,7 @@ function App() {
         }
         else {
             setNewTodoText('');
-            setSubmittedTodo(state => !state)
+            mutateState()
         }
     }
 
@@ -76,7 +77,7 @@ function App() {
 
     useEffect(() => {
         (async () => setTodos(await getTodos()))()
-    }, [submittedTodo])
+    }, [mutatedState])
 
     return (
         <Container fluid={true} className='d-flex justify-content-center my-3'>
@@ -123,7 +124,7 @@ function App() {
                                 return todo.text.startsWith(searchText)
                             })
                             .map(todo => {
-                                return <TodoCard todo={todo} key={todo.id}/>
+                                return <TodoCard todo={todo} key={todo.id} mutateParentState={mutateState}/>
                             })}
                     </>
                 }
