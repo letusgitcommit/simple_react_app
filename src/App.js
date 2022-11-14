@@ -24,10 +24,7 @@ function App() {
     const handleNewTodoSubmit = e => {
         e.preventDefault();
         const result = newTodo(newTodoText);
-        if (!result) {
-            console.log('did not work')
-        }
-        else {
+        if (result) {
             setNewTodoText('');
             mutateState()
         }
