@@ -4,8 +4,12 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ChildList from "./ChildList";
 import {useState} from "react";
 
+
 export default function TodoCard(props) {
     const [expanded, setExpanded] = useState(false)
+    const ct = new Date(props.todo.created_timestamp)
+    const mt = new Date(props.todo.modified_timestamp)
+
     return (
         <Card className='mb-3' id={props.todo.id}>
             <div className='m-2'>
@@ -29,32 +33,14 @@ export default function TodoCard(props) {
                 </ListGroup>
                 <hr className='text-primary'/>
                 <ListGroup className='list-group-flush'>
-                    <ListGroup.Item>Is Complete</ListGroup.Item>
+                    <ListGroup.Item>Is Complete: {props.todo.complete? 'Yes': 'No'}</ListGroup.Item>
                     { expanded &&
                         <>
-                            <ListGroup.Item>Created</ListGroup.Item>
-                            <ListGroup.Item>Modified</ListGroup.Item>
+                            <ListGroup.Item>Created: {ct.getMonth()}/{ct.getDate()}/{ct.getFullYear()}</ListGroup.Item>
+                            <ListGroup.Item>Modified: {mt.getMonth()}/{mt.getDate()}/{mt.getFullYear()}</ListGroup.Item>
                         </>
                     }
                 </ListGroup>
-                {props.todo.parent && expanded &&
-                    <>
-                        <hr className='text-primary' />
-                        <ListGroup className='list-group-flush'>
-                            <ListGroup.Item>Parent</ListGroup.Item>
-                            <ListGroup.Item>{props.todo.parent.text}</ListGroup.Item>
-                        </ListGroup>
-                    </>
-                }
-                { props.todo.childArray && expanded &&
-                    <>
-                        <hr className='text-primary' />
-                        <ListGroup className='list-group-flush'>
-                            <ListGroup.Item>Subtasks</ListGroup.Item>
-                            <ChildList childArray={props.todo.childArray} />
-                        </ListGroup>
-                    </>
-                }
             </div>
 
         </Card>
